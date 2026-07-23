@@ -87,15 +87,20 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 .btn-ghost:hover{border-color:#fff;background:rgba(243,246,247,.08)}
 .hero-note{font-size:.85rem;letter-spacing:.05em;color:var(--faint)}
 
-/* ── vintage clock cta (reloj real, hora CDMX) ───────── */
-.badge-cta{position:relative;width:150px;height:150px;border-radius:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;transform:rotate(var(--br,0deg));will-change:transform}
+/* ── analog clock cta (dibujado en CSS, hora CDMX) ───── */
+.badge-cta{position:relative;width:220px;height:220px;border-radius:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9rem;transform:rotate(var(--br,0deg));will-change:transform}
 .badge-cta:hover{transform:rotate(var(--br,0deg)) scale(1.05);transition:transform .3s}
-.clock-frame{position:relative;width:112px;height:112px;border-radius:50%;overflow:hidden;animation:clockGlow 3.2s ease-in-out infinite}
-.clock-frame img{width:100%;height:100%;object-fit:cover;display:block}
-.clock-sweep{position:absolute;top:50%;left:50%;width:2px;height:33%;background:linear-gradient(to top,var(--steel),rgba(126,166,182,0));border-radius:2px;transform-origin:50% 100%;transform:translate(-50%,-100%) rotate(var(--sweep,0deg));transition:transform 1s linear;box-shadow:0 0 6px rgba(126,166,182,.9)}
-.clock-center-pin{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:var(--steel);transform:translate(-50%,-50%);box-shadow:0 0 6px rgba(126,166,182,.9)}
-@keyframes clockGlow{0%,100%{box-shadow:0 0 18px rgba(126,166,182,.3)}50%{box-shadow:0 0 30px rgba(126,166,182,.55)}}
-.clock-label{font-size:.78rem;font-weight:600;letter-spacing:.1em;color:var(--white);background:rgba(0,7,44,.55);padding:.3rem .8rem;border-radius:99px;border:1px solid var(--border);font-variant-numeric:tabular-nums}
+.clock-frame{position:relative;width:172px;height:172px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--navy-3),var(--navy) 70%);border:3px solid var(--steel);box-shadow:0 0 0 6px rgba(126,166,182,.12),0 0 34px rgba(126,166,182,.4);animation:clockGlow 3.2s ease-in-out infinite}
+.clock-tick{position:absolute;top:0;left:50%;width:2px;height:86px;margin-left:-1px;transform-origin:50% 100%}
+.clock-tick::before{content:'';position:absolute;top:0;left:0;width:2px;height:10px;background:rgba(243,246,247,.45)}
+.clock-tick.major::before{width:3px;height:16px;margin-left:-0.5px;background:var(--steel)}
+.clock-hand{position:absolute;bottom:50%;left:50%;transform-origin:50% 100%;background:var(--white);border-radius:3px}
+.clock-hand.hour{width:6px;height:44px;margin-left:-3px;background:var(--white)}
+.clock-hand.minute{width:4px;height:62px;margin-left:-2px;background:var(--steel-light)}
+.clock-sweep{position:absolute;bottom:50%;left:50%;width:2px;height:70px;margin-left:-1px;background:linear-gradient(to top,var(--steel),rgba(126,166,182,0));border-radius:2px;transform-origin:50% 100%;transform:rotate(var(--sweep,0deg));transition:transform 1s linear;box-shadow:0 0 6px rgba(126,166,182,.9)}
+.clock-center-pin{position:absolute;top:50%;left:50%;width:11px;height:11px;border-radius:50%;background:var(--steel);transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(126,166,182,.9)}
+@keyframes clockGlow{0%,100%{box-shadow:0 0 0 6px rgba(126,166,182,.12),0 0 24px rgba(126,166,182,.35)}50%{box-shadow:0 0 0 6px rgba(126,166,182,.2),0 0 42px rgba(126,166,182,.6)}}
+.clock-label{font-size:.85rem;font-weight:600;letter-spacing:.1em;color:var(--white);background:rgba(0,7,44,.55);padding:.35rem .9rem;border-radius:99px;border:1px solid var(--border);font-variant-numeric:tabular-nums}
 
 /* ── pressure / highlights ─────────────────────────── */
 #presion .sec-head.center{max-width:760px}
@@ -159,7 +164,12 @@ footer a:hover{color:#fff}
   .enfoque-grid{grid-template-columns:1fr}
   .proceso-grid{grid-template-columns:1fr}
   .hero-inner{align-items:flex-start}
-  .badge-cta{width:120px;height:120px}
+  .badge-cta{width:170px;height:170px}
+  .clock-frame{width:132px;height:132px}
+  .clock-tick{height:66px}
+  .clock-hand.hour{height:34px}
+  .clock-hand.minute{height:48px}
+  .clock-sweep{height:54px}
 }
 @media(max-width:680px){
   .nav-links,.nav-cta{display:none}
@@ -217,7 +227,20 @@ footer a:hover{color:#fff}
     </div>
     <a href="https://wa.me/525567506067?text=Hola%2C%20necesito%20una%20consulta%20confidencial%20de%20defensa%20penal." target="_blank" rel="noopener" class="badge-cta" aria-label="Hora actual en Ciudad de México — Contactar por WhatsApp">
       <div class="clock-frame">
-        <img src="vintage-clock.jpg" alt="Reloj analógico vintage">
+        <div class="clock-tick major" style="transform:rotate(0deg)"></div>
+        <div class="clock-tick" style="transform:rotate(30deg)"></div>
+        <div class="clock-tick" style="transform:rotate(60deg)"></div>
+        <div class="clock-tick major" style="transform:rotate(90deg)"></div>
+        <div class="clock-tick" style="transform:rotate(120deg)"></div>
+        <div class="clock-tick" style="transform:rotate(150deg)"></div>
+        <div class="clock-tick major" style="transform:rotate(180deg)"></div>
+        <div class="clock-tick" style="transform:rotate(210deg)"></div>
+        <div class="clock-tick" style="transform:rotate(240deg)"></div>
+        <div class="clock-tick major" style="transform:rotate(270deg)"></div>
+        <div class="clock-tick" style="transform:rotate(300deg)"></div>
+        <div class="clock-tick" style="transform:rotate(330deg)"></div>
+        <div class="clock-hand hour" id="clock-hour"></div>
+        <div class="clock-hand minute" id="clock-minute"></div>
         <div class="clock-sweep" id="clock-sweep"></div>
         <div class="clock-center-pin"></div>
       </div>
@@ -377,14 +400,18 @@ hamburger.addEventListener('click', () => {
 });
 mobileMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', closeMenu));
 
+const clockHour = document.getElementById('clock-hour');
+const clockMinute = document.getElementById('clock-minute');
 const clockSweep = document.getElementById('clock-sweep');
 const clockTime = document.getElementById('clock-time');
 function updateClock() {
   const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).formatToParts(new Date());
-  const h = parts.find(p => p.type === 'hour').value;
-  const m = parts.find(p => p.type === 'minute').value;
+  const h = +parts.find(p => p.type === 'hour').value;
+  const m = +parts.find(p => p.type === 'minute').value;
   const s = +parts.find(p => p.type === 'second').value;
-  if (clockTime) clockTime.textContent = `${h}:${m} CDMX`;
+  if (clockTime) clockTime.textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')} CDMX`;
+  if (clockHour) clockHour.style.transform = `rotate(${(h % 12) * 30 + m * 0.5}deg)`;
+  if (clockMinute) clockMinute.style.transform = `rotate(${m * 6 + s * 0.1}deg)`;
   if (clockSweep) clockSweep.style.setProperty('--sweep', (s * 6) + 'deg');
 }
 updateClock();
