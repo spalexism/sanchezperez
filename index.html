@@ -145,7 +145,11 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 footer{background:#000420;color:var(--muted);padding:2.8rem 6%;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;font-size:.85rem;border-top:1px solid var(--border)}
 footer a{color:var(--muted);transition:color .2s}
 footer a:hover{color:#fff}
-.footer-links{display:flex;gap:1.5rem}
+.footer-links{display:flex;gap:1.5rem;align-items:center}
+.footer-social{display:flex;gap:.7rem}
+.footer-social a{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s}
+.footer-social a:hover{border-color:var(--steel);background:rgba(126,166,182,.1)}
+.footer-social svg{width:16px;height:16px}
 
 /* ── whatsapp float ───────────────────────────────── */
 .wa-btn{position:fixed;bottom:2rem;right:2rem;z-index:300;width:58px;height:58px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s}
@@ -367,6 +371,14 @@ footer a:hover{color:#fff}
   <span>Sánchez Pérez Abogados © 2026 — Cédula profesional vigente.</span>
   <div class="footer-links">
     <a href="aviso-privacidad.html">Aviso de privacidad</a>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/sanchezperezabogados?igsh=dWppMDJ1OTh2NDdz&utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@alexismsp?_r=1&_t=ZS-98HM4pTgkPX" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14 3v10.8a2.9 2.9 0 1 1-2.4-2.85M14 3c.4 2.2 2 3.9 4.2 4.2M14 3h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
   </div>
 </footer>
 
