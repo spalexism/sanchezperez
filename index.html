@@ -72,11 +72,14 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 .nav-mobile .mob-cta{margin-top:1.2rem;background:var(--steel);color:var(--navy)!important;text-align:center;border-radius:99px;padding:.9rem!important;font-weight:600}
 
 /* ── hero ─────────────────────────────────────────── */
-.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;background:radial-gradient(ellipse 900px 700px at 78% 22%,rgba(126,166,182,.16),transparent 60%),linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 100%);padding:9rem 6% 6rem}
-.hero-line{position:absolute;border:1px solid rgba(243,246,247,.07);border-radius:50%;transform:translateY(var(--py,0px));will-change:transform}
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;background:var(--navy);padding:9rem 6% 6rem}
+.hero-bg-wrap{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-bg-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 32%;transform:translateY(var(--hby,0px)) scale(var(--hbs,1.08));will-change:transform}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 900px 700px at 78% 22%,rgba(126,166,182,.14),transparent 60%),linear-gradient(160deg,rgba(0,7,44,.86) 0%,rgba(12,20,64,.72) 48%,rgba(0,7,44,.92) 100%)}
+.hero-line{position:absolute;z-index:2;border:1px solid rgba(243,246,247,.1);border-radius:50%;transform:translateY(var(--py,0px));will-change:transform}
 .hero-line.l1{width:900px;height:900px;right:-320px;top:-260px}
 .hero-line.l2{width:600px;height:600px;right:-160px;top:-70px}
-.hero-inner{position:relative;z-index:2;width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;flex-wrap:wrap}
+.hero-inner{position:relative;z-index:3;width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;flex-wrap:wrap}
 .hero-content{max-width:700px;transform:translateY(var(--hy,0px));opacity:var(--ho,1);will-change:transform,opacity}
 .hero h1{font-size:clamp(2.7rem,5.6vw,4.4rem);line-height:1.1;color:var(--white);margin-bottom:1.6rem}
 .hero-sub{font-size:1.2rem;line-height:1.7;color:var(--muted);max-width:560px;margin-bottom:2.5rem}
@@ -203,6 +206,8 @@ footer a:hover{color:#fff}
 </div>
 
 <section class="hero" id="inicio">
+  <div class="hero-bg-wrap"><img src="hero-bg.jpg" alt="Justicia mexicana — balanza, mazo y códigos ante la bandera de México"></div>
+  <div class="hero-overlay"></div>
   <div class="hero-line l1"></div>
   <div class="hero-line l2"></div>
   <div class="hero-inner">
@@ -409,6 +414,7 @@ const heroEl = document.querySelector('.hero');
 const heroLineL1 = document.querySelector('.hero-line.l1');
 const heroLineL2 = document.querySelector('.hero-line.l2');
 const heroContentEl = document.querySelector('.hero-content');
+const heroBgImg = document.querySelector('.hero-bg-wrap img');
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
 function applyScrollEffects() {
@@ -421,6 +427,12 @@ function applyScrollEffects() {
     const heroH = heroEl ? heroEl.offsetHeight : vh;
     heroContentEl.style.setProperty('--hy', Math.min(y * 0.18, 90) + 'px');
     heroContentEl.style.setProperty('--ho', (1 - clamp(y / (heroH * 0.75), 0, 1) * 0.65).toFixed(3));
+  }
+  if (heroBgImg) {
+    const heroH = heroEl ? heroEl.offsetHeight : vh;
+    const progress = clamp(y / heroH, 0, 1);
+    heroBgImg.style.setProperty('--hby', (y * 0.28) + 'px');
+    heroBgImg.style.setProperty('--hbs', (1.08 + progress * 0.14).toFixed(3));
   }
   document.querySelectorAll('.badge-cta').forEach(b => b.style.setProperty('--br', (y * 0.05) + 'deg'));
 
