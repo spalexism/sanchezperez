@@ -73,11 +73,11 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 
 /* ── hero ─────────────────────────────────────────── */
 .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;background:radial-gradient(ellipse 900px 700px at 78% 22%,rgba(126,166,182,.16),transparent 60%),linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 100%);padding:9rem 6% 6rem}
-.hero-line{position:absolute;border:1px solid rgba(243,246,247,.07);border-radius:50%}
+.hero-line{position:absolute;border:1px solid rgba(243,246,247,.07);border-radius:50%;transform:translateY(var(--py,0px));will-change:transform}
 .hero-line.l1{width:900px;height:900px;right:-320px;top:-260px}
 .hero-line.l2{width:600px;height:600px;right:-160px;top:-70px}
 .hero-inner{position:relative;z-index:2;width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;flex-wrap:wrap}
-.hero-content{max-width:700px}
+.hero-content{max-width:700px;transform:translateY(var(--hy,0px));opacity:var(--ho,1);will-change:transform,opacity}
 .hero h1{font-size:clamp(2.7rem,5.6vw,4.4rem);line-height:1.1;color:var(--white);margin-bottom:1.6rem}
 .hero-sub{font-size:1.2rem;line-height:1.7;color:var(--muted);max-width:560px;margin-bottom:2.5rem}
 .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem}
@@ -88,8 +88,8 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 .hero-note{font-size:.85rem;letter-spacing:.05em;color:var(--faint)}
 
 /* ── circular clock cta ───────────────────────────── */
-.badge-cta{position:relative;width:150px;height:150px;border-radius:50%;background:var(--steel);flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;transition:transform .3s}
-.badge-cta:hover{transform:scale(1.05)}
+.badge-cta{position:relative;width:150px;height:150px;border-radius:50%;background:var(--steel);flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;transform:rotate(var(--br,0deg));will-change:transform}
+.badge-cta:hover{transform:rotate(var(--br,0deg)) scale(1.05);transition:transform .3s}
 .clock-face{position:relative;width:96px;height:96px;border-radius:50%;border:1px solid rgba(0,7,44,.35)}
 .clock-tick{position:absolute;top:0;left:50%;width:2px;height:48px;margin-left:-1px;transform-origin:50% 100%}
 .clock-tick::before{content:'';position:absolute;top:0;left:0;width:2px;height:7px;background:rgba(0,7,44,.45)}
@@ -149,9 +149,13 @@ footer a:hover{color:#fff}
 .wa-btn{position:fixed;bottom:2rem;right:2rem;z-index:300;width:58px;height:58px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s}
 .wa-btn:hover{transform:scale(1.08)}
 
-/* ── reveal ───────────────────────────────────────── */
-.s-hide{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
-.s-hide.in-view{opacity:1;transform:translateY(0)}
+/* ── scroll-linked reveal (parallax + 3D tilt tied to scroll position) ── */
+.s-hide{
+  opacity:var(--sr-o,0);
+  transform:perspective(900px) rotateX(var(--sr-rx,10deg)) translateY(var(--sr-y,36px));
+  transform-style:preserve-3d;
+  will-change:transform,opacity;
+}
 
 /* ── responsive ───────────────────────────────────── */
 @media(max-width:900px){
@@ -166,6 +170,10 @@ footer a:hover{color:#fff}
   section{padding:4.5rem 6%}
   .contact-meta{gap:1.6rem}
   .badge-cta{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .s-hide{opacity:1;transform:none}
+  .hero-line,.hero-content,.badge-cta{transform:none}
 }
 </style>
 </head>
@@ -395,18 +403,54 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
-const revealEls = document.querySelectorAll('.s-hide');
-['.highlight-list','.proceso-grid','.enfoque-grid'].forEach(sel => {
-  const grid = document.querySelector(sel);
-  if (!grid) return;
-  [...grid.children].forEach((child, i) => { child.style.transitionDelay = `${i * 0.08}s`; });
-});
-const revealObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in-view'); revealObserver.unobserve(e.target); }
+/* ── scroll-linked animation engine (parallax + 3D scroll reveal) ── */
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const heroEl = document.querySelector('.hero');
+const heroLineL1 = document.querySelector('.hero-line.l1');
+const heroLineL2 = document.querySelector('.hero-line.l2');
+const heroContentEl = document.querySelector('.hero-content');
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+function applyScrollEffects() {
+  const y = window.scrollY;
+  const vh = window.innerHeight;
+
+  if (heroLineL1) heroLineL1.style.setProperty('--py', (y * 0.15) + 'px');
+  if (heroLineL2) heroLineL2.style.setProperty('--py', (-y * 0.22) + 'px');
+  if (heroContentEl) {
+    const heroH = heroEl ? heroEl.offsetHeight : vh;
+    heroContentEl.style.setProperty('--hy', Math.min(y * 0.18, 90) + 'px');
+    heroContentEl.style.setProperty('--ho', (1 - clamp(y / (heroH * 0.75), 0, 1) * 0.65).toFixed(3));
+  }
+  document.querySelectorAll('.badge-cta').forEach(b => b.style.setProperty('--br', (y * 0.05) + 'deg'));
+
+  document.querySelectorAll('.s-hide').forEach(el => {
+    const r = el.getBoundingClientRect();
+    const progress = clamp((vh - r.top) / (vh * 0.62), 0, 1);
+    el.style.setProperty('--sr-o', progress.toFixed(3));
+    el.style.setProperty('--sr-y', ((1 - progress) * 36).toFixed(1) + 'px');
+    el.style.setProperty('--sr-rx', ((1 - progress) * 9).toFixed(1) + 'deg');
   });
-}, { threshold: .1 });
-revealEls.forEach(el => revealObserver.observe(el));
+}
+
+if (reduceMotion) {
+  document.querySelectorAll('.s-hide').forEach(el => {
+    el.style.setProperty('--sr-o', 1);
+    el.style.setProperty('--sr-y', '0px');
+    el.style.setProperty('--sr-rx', '0deg');
+  });
+} else {
+  let ticking = false;
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(() => { applyScrollEffects(); ticking = false; });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  applyScrollEffects();
+}
 </script>
 </body>
 </html>
