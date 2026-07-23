@@ -23,8 +23,9 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#00072C;--navy-2:#0C1440;--navy-3:#141C4E;
-  --steel:#7EA6B6;--steel-light:#A9C4CF;--steel-dark:#5C8898;
+  --navy:#081229;--navy-2:#0C1440;--navy-3:#141C4E;
+  --steel:#CEAA6E;--steel-light:#E0C48C;--steel-dark:#AD8952;
+  --silver:#A5A2A6;
   --white:#F3F6F7;--muted:rgba(243,246,247,.62);--faint:rgba(243,246,247,.6);
   --border:rgba(243,246,247,.1);
   --ease:.35s cubic-bezier(.4,0,.2,1);
@@ -54,7 +55,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--border);padding:.85rem 6%}
 .nav-logo{display:flex;align-items:center;gap:12px}
 .nav-word{font-family:'Gloock',serif;font-size:1.15rem;color:var(--white);letter-spacing:-.01em}
-.nav-word small{display:block;font-family:'Crimson Pro',serif;font-size:.62rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--steel);margin-top:2px}
+.nav-word small{display:block;font-family:'Crimson Pro',serif;font-size:.62rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--silver);margin-top:2px}
 .nav-links{display:flex;gap:2.2rem}
 .nav-links a{font-size:.92rem;color:var(--muted);transition:color .2s}
 .nav-links a:hover{color:var(--white)}
@@ -75,7 +76,7 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;background:var(--navy);padding:9rem 6% 6rem}
 .hero-bg-wrap{position:absolute;inset:0;z-index:0;overflow:hidden}
 .hero-bg-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 22%;transform:translateY(var(--hby,0px)) scale(var(--hbs,1.08));will-change:transform}
-.hero-overlay{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 900px 700px at 78% 22%,rgba(126,166,182,.14),transparent 60%),linear-gradient(160deg,rgba(0,7,44,.86) 0%,rgba(12,20,64,.72) 48%,rgba(0,7,44,.92) 100%)}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 900px 700px at 78% 22%,rgba(206,170,110,.14),transparent 60%),linear-gradient(160deg,rgba(0,7,44,.86) 0%,rgba(12,20,64,.72) 48%,rgba(0,7,44,.92) 100%)}
 .hero-inner{position:relative;z-index:3;width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;flex-wrap:wrap}
 .hero-content{max-width:700px;transform:translateY(var(--hy,0px));opacity:var(--ho,1);will-change:transform,opacity}
 .hero h1{font-size:clamp(2.7rem,5.6vw,4.4rem);line-height:1.1;color:var(--white);margin-bottom:1.6rem}
@@ -90,16 +91,16 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 /* ── analog clock cta (dibujado en CSS, hora CDMX) ───── */
 .badge-cta{position:relative;width:220px;height:220px;border-radius:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9rem;transform:rotate(var(--br,0deg));will-change:transform}
 .badge-cta:hover{transform:rotate(var(--br,0deg)) scale(1.05);transition:transform .3s}
-.clock-frame{position:relative;width:172px;height:172px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--navy-3),var(--navy) 70%);border:3px solid var(--steel);box-shadow:0 0 0 6px rgba(126,166,182,.12),0 0 34px rgba(126,166,182,.4);animation:clockGlow 3.2s ease-in-out infinite}
+.clock-frame{position:relative;width:172px;height:172px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--navy-3),var(--navy) 70%);border:3px solid var(--steel);box-shadow:0 0 0 6px rgba(206,170,110,.12),0 0 34px rgba(206,170,110,.4);animation:clockGlow 3.2s ease-in-out infinite}
 .clock-tick{position:absolute;top:0;left:50%;width:2px;height:86px;margin-left:-1px;transform-origin:50% 100%}
 .clock-tick::before{content:'';position:absolute;top:0;left:0;width:2px;height:10px;background:rgba(243,246,247,.45)}
 .clock-tick.major::before{width:3px;height:16px;margin-left:-0.5px;background:var(--steel)}
 .clock-hand{position:absolute;bottom:50%;left:50%;transform-origin:50% 100%;background:var(--white);border-radius:3px}
 .clock-hand.hour{width:6px;height:44px;margin-left:-3px;background:var(--white)}
 .clock-hand.minute{width:4px;height:62px;margin-left:-2px;background:var(--steel-light)}
-.clock-sweep{position:absolute;bottom:50%;left:50%;width:2px;height:70px;margin-left:-1px;background:linear-gradient(to top,var(--steel),rgba(126,166,182,0));border-radius:2px;transform-origin:50% 100%;transform:rotate(var(--sweep,0deg));transition:transform 1s linear;box-shadow:0 0 6px rgba(126,166,182,.9)}
-.clock-center-pin{position:absolute;top:50%;left:50%;width:11px;height:11px;border-radius:50%;background:var(--steel);transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(126,166,182,.9)}
-@keyframes clockGlow{0%,100%{box-shadow:0 0 0 6px rgba(126,166,182,.12),0 0 24px rgba(126,166,182,.35)}50%{box-shadow:0 0 0 6px rgba(126,166,182,.2),0 0 42px rgba(126,166,182,.6)}}
+.clock-sweep{position:absolute;bottom:50%;left:50%;width:2px;height:70px;margin-left:-1px;background:linear-gradient(to top,var(--steel),rgba(206,170,110,0));border-radius:2px;transform-origin:50% 100%;transform:rotate(var(--sweep,0deg));transition:transform 1s linear;box-shadow:0 0 6px rgba(206,170,110,.9)}
+.clock-center-pin{position:absolute;top:50%;left:50%;width:11px;height:11px;border-radius:50%;background:var(--steel);transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(206,170,110,.9)}
+@keyframes clockGlow{0%,100%{box-shadow:0 0 0 6px rgba(206,170,110,.12),0 0 24px rgba(206,170,110,.35)}50%{box-shadow:0 0 0 6px rgba(206,170,110,.2),0 0 42px rgba(206,170,110,.6)}}
 .clock-label{font-size:.85rem;font-weight:600;letter-spacing:.1em;color:var(--white);background:rgba(0,7,44,.55);padding:.35rem .9rem;border-radius:99px;border:1px solid var(--border);font-variant-numeric:tabular-nums}
 
 /* ── pressure / highlights ─────────────────────────── */
@@ -122,7 +123,7 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 @media (max-width:720px){.perfil-grid{grid-template-columns:1fr}}
 .enfoque-card{padding:2.2rem 1.8rem;border:1px solid var(--border);border-radius:12px;transition:border-color .25s,transform .25s}
 .enfoque-card:hover{border-color:var(--steel);transform:translateY(-4px)}
-.enfoque-icon{width:46px;height:46px;border-radius:10px;background:rgba(126,166,182,.14);display:flex;align-items:center;justify-content:center;margin-bottom:1.3rem}
+.enfoque-icon{width:46px;height:46px;border-radius:10px;background:rgba(206,170,110,.14);display:flex;align-items:center;justify-content:center;margin-bottom:1.3rem}
 .enfoque-card h3{font-size:1.2rem;color:var(--white);margin-bottom:.6rem}
 .enfoque-card p{font-size:.95rem;color:var(--muted);line-height:1.7}
 
@@ -132,7 +133,7 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 .founder-avatar{width:110px;height:110px;border-radius:18px;margin:0 auto 1.6rem;overflow:hidden}
 .founder-avatar img{width:100%;height:100%;object-fit:cover;display:block}
 .founder-name{font-family:'Gloock',serif;font-size:1.5rem;color:var(--white);margin-bottom:.3rem}
-.founder-role{font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-bottom:1.6rem}
+.founder-role{font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;color:var(--silver);margin-bottom:1.6rem}
 .founder-bio{font-size:1.05rem;line-height:1.85;color:var(--muted);margin-bottom:2rem}
 .founder-pillars{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem}
 .founder-pillar{font-size:.82rem;padding:.5rem 1.1rem;border-radius:99px;border:1px solid var(--border);color:var(--faint)}
@@ -150,7 +151,7 @@ footer a:hover{color:#fff}
 .footer-links{display:flex;gap:1.5rem;align-items:center}
 .footer-social{display:flex;gap:.7rem}
 .footer-social a{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s}
-.footer-social a:hover{border-color:var(--steel);background:rgba(126,166,182,.1)}
+.footer-social a:hover{border-color:var(--steel);background:rgba(206,170,110,.1)}
 .footer-social svg{width:16px;height:16px}
 
 /* ── whatsapp float ───────────────────────────────── */
@@ -378,17 +379,17 @@ footer a:hover{color:#fff}
   </div>
   <div class="enfoque-grid">
     <div class="enfoque-card s-hide">
-      <div class="enfoque-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2c4 1.5 7 1.5 7 1.5v6c0 5-3 8-7 10-4-2-7-5-7-10v-6S7 3.5 11 2z" stroke="#7EA6B6" stroke-width="1.3"/></svg></div>
+      <div class="enfoque-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2c4 1.5 7 1.5 7 1.5v6c0 5-3 8-7 10-4-2-7-5-7-10v-6S7 3.5 11 2z" stroke="#CEAA6E" stroke-width="1.3"/></svg></div>
       <h3>Confidencialidad estricta</h3>
       <p>Manejo reservado de cada asunto.</p>
     </div>
     <div class="enfoque-card s-hide">
-      <div class="enfoque-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#7EA6B6" stroke-width="1.3"/><path d="M11 6.5V11l3 2" stroke="#7EA6B6" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      <div class="enfoque-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#CEAA6E" stroke-width="1.3"/><path d="M11 6.5V11l3 2" stroke="#CEAA6E" stroke-width="1.3" stroke-linecap="round"/></svg></div>
       <h3>Actuación inmediata</h3>
       <p>Actuamos desde el primer momento, no solo en juicio.</p>
     </div>
     <div class="enfoque-card s-hide">
-      <div class="enfoque-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11h5l2-4 2 8 2-4h3" stroke="#7EA6B6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="enfoque-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11h5l2-4 2 8 2-4h3" stroke="#CEAA6E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <h3>Estrategia construida caso por caso</h3>
       <p>Cada asunto se resuelve con una teoría del caso sólida, no de forma genérica.</p>
     </div>
