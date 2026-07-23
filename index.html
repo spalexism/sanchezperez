@@ -87,18 +87,14 @@ nav.scrolled{background:rgba(0,7,44,.92);backdrop-filter:blur(14px);box-shadow:0
 .btn-ghost:hover{border-color:#fff;background:rgba(243,246,247,.08)}
 .hero-note{font-size:.85rem;letter-spacing:.05em;color:var(--faint)}
 
-/* ── hourglass cta (reloj de arena vivo, hora CDMX) ─── */
-.badge-cta{position:relative;width:150px;height:150px;border-radius:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;transform:rotate(var(--br,0deg));will-change:transform;perspective:600px}
+/* ── vintage clock cta (reloj real, hora CDMX) ───────── */
+.badge-cta{position:relative;width:150px;height:150px;border-radius:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;transform:rotate(var(--br,0deg));will-change:transform}
 .badge-cta:hover{transform:rotate(var(--br,0deg)) scale(1.05);transition:transform .3s}
-.hourglass-frame{position:relative;width:104px;height:104px;border-radius:50%;overflow:hidden;border:2px solid var(--steel);box-shadow:0 0 28px rgba(126,166,182,.4),inset 0 0 20px rgba(0,0,0,.5);background:#0a0602;transform-style:preserve-3d;transition:transform 1.15s cubic-bezier(.65,0,.35,1)}
-.hourglass-frame.flip{transform:rotateX(180deg)}
-.hourglass-frame img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.35)}
-.hourglass-particle{position:absolute;left:50%;top:36%;width:3px;height:3px;border-radius:50%;background:#E4C07A;opacity:0;box-shadow:0 0 4px rgba(228,192,122,.8);animation:sandFall 1.7s linear infinite}
-.hourglass-particle.p2{left:48%;animation-delay:.35s}
-.hourglass-particle.p3{left:52.5%;animation-delay:.7s}
-.hourglass-particle.p4{left:47.5%;animation-delay:1.05s}
-.hourglass-particle.p5{left:51%;animation-delay:1.4s}
-@keyframes sandFall{0%{transform:translateY(-6px);opacity:0}12%{opacity:1}85%{opacity:1}100%{transform:translateY(34px);opacity:0}}
+.clock-frame{position:relative;width:112px;height:112px;border-radius:50%;overflow:hidden;animation:clockGlow 3.2s ease-in-out infinite}
+.clock-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.clock-sweep{position:absolute;top:50%;left:50%;width:2px;height:33%;background:linear-gradient(to top,var(--steel),rgba(126,166,182,0));border-radius:2px;transform-origin:50% 100%;transform:translate(-50%,-100%) rotate(var(--sweep,0deg));transition:transform 1s linear;box-shadow:0 0 6px rgba(126,166,182,.9)}
+.clock-center-pin{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:var(--steel);transform:translate(-50%,-50%);box-shadow:0 0 6px rgba(126,166,182,.9)}
+@keyframes clockGlow{0%,100%{box-shadow:0 0 18px rgba(126,166,182,.3)}50%{box-shadow:0 0 30px rgba(126,166,182,.55)}}
 .clock-label{font-size:.78rem;font-weight:600;letter-spacing:.1em;color:var(--white);background:rgba(0,7,44,.55);padding:.3rem .8rem;border-radius:99px;border:1px solid var(--border);font-variant-numeric:tabular-nums}
 
 /* ── pressure / highlights ─────────────────────────── */
@@ -175,8 +171,8 @@ footer a:hover{color:#fff}
 @media(prefers-reduced-motion:reduce){
   .s-hide{opacity:1;transform:none}
   .hero-content,.badge-cta{transform:none}
-  .hourglass-frame.flip{transform:none}
-  .hourglass-particle{animation:none;opacity:0}
+  .clock-frame{animation:none}
+  .clock-sweep{transition:none}
 }
 </style>
 </head>
@@ -220,15 +216,12 @@ footer a:hover{color:#fff}
       <p class="hero-note">Atención inmediata y confidencial.</p>
     </div>
     <a href="https://wa.me/525567506067?text=Hola%2C%20necesito%20una%20consulta%20confidencial%20de%20defensa%20penal." target="_blank" rel="noopener" class="badge-cta" aria-label="Hora actual en Ciudad de México — Contactar por WhatsApp">
-      <div class="hourglass-frame" id="hourglass-frame">
-        <img src="hourglass.jpg" alt="Reloj de arena">
-        <span class="hourglass-particle p1"></span>
-        <span class="hourglass-particle p2"></span>
-        <span class="hourglass-particle p3"></span>
-        <span class="hourglass-particle p4"></span>
-        <span class="hourglass-particle p5"></span>
+      <div class="clock-frame">
+        <img src="vintage-clock.jpg" alt="Reloj analógico vintage">
+        <div class="clock-sweep" id="clock-sweep"></div>
+        <div class="clock-center-pin"></div>
       </div>
-      <span class="clock-label" id="hourglass-time">00:00 CDMX</span>
+      <span class="clock-label" id="clock-time">00:00 CDMX</span>
     </a>
   </div>
 </section>
@@ -384,18 +377,18 @@ hamburger.addEventListener('click', () => {
 });
 mobileMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', closeMenu));
 
-const hourglassFrame = document.getElementById('hourglass-frame');
-const hourglassTime = document.getElementById('hourglass-time');
-function updateHourglass() {
+const clockSweep = document.getElementById('clock-sweep');
+const clockTime = document.getElementById('clock-time');
+function updateClock() {
   const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).formatToParts(new Date());
   const h = parts.find(p => p.type === 'hour').value;
   const m = parts.find(p => p.type === 'minute').value;
   const s = +parts.find(p => p.type === 'second').value;
-  if (hourglassTime) hourglassTime.textContent = `${h}:${m} CDMX`;
-  if (hourglassFrame) hourglassFrame.classList.toggle('flip', s >= 30);
+  if (clockTime) clockTime.textContent = `${h}:${m} CDMX`;
+  if (clockSweep) clockSweep.style.setProperty('--sweep', (s * 6) + 'deg');
 }
-updateHourglass();
-setInterval(updateHourglass, 1000);
+updateClock();
+setInterval(updateClock, 1000);
 
 /* ── scroll-linked animation engine (parallax + 3D scroll reveal) ── */
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
